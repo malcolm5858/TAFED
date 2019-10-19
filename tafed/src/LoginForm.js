@@ -2,6 +2,7 @@ import React from "react";
 import { Formik } from "formik";
 import * as EmailValidator from "email-validator";
 import * as Yup from "yup";
+import "./styles.css";
 function LoginForm(props) {
   return (
     <Formik
