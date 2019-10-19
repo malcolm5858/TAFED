@@ -1,4 +1,4 @@
-from flask import flask
+from flask import Flask
 from flask_restful import Api, Resource, reqparse
 
 app = Flask(__name__)
@@ -11,9 +11,9 @@ users = [
         "occupation": "Network Engineer"
     },
     {
-        "name": "ㅋㅋㅋㅋㅋㅋ",
+        "name": "Seungdeok",
         "age": 39,
-        "occupation": "ㅠㅠㅠㅠㅠ"
+        "occupation": "Adrian"
     },
     {
         "name": "Malcolm",
