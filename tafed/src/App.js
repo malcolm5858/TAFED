@@ -3,6 +3,7 @@ import "./App.css";
 import LoginForm from "./LoginForm";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./Home";
+import Register from "./Register";
 
 function App() {
   return (
@@ -16,6 +17,10 @@ function App() {
             <Route path="/login">
               <h1>Login</h1>
               <LoginForm />
+            </Route>
+            <Route path="/Register">
+              <h1>Register</h1>
+              <Register />
             </Route>
           </Switch>
         </div>

@@ -42,10 +42,12 @@ export default class Home extends React.Component {
                 TAFED
               </Box>
             </Typography>
-            <Link to="/Login">
-              <Button color="inherit">Login</Button>
+            <Link to="/Login" style={{ textDecoration: "none" }}>
+              <Button color="Black">Login</Button>
             </Link>
-            <Button color="inherit">Register</Button>
+            <Link to="/Register" style={{ textDecoration: "none" }}>
+              <Button color="Black">Register</Button>
+            </Link>
           </Toolbar>
         </AppBar>
       </div>
