@@ -114,6 +114,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import Match from "./Match";
+import icon from "/Users/malcolmmachesky/Documents/code/hackathon/TAFED/tafed/src/Logo.png";
 
 function Copyright() {
   return (
@@ -258,13 +259,7 @@ export default function Home() {
         elevation={0}
         className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
-          <Typography
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.toolbarTitle}>
-            TAFED
-          </Typography>
+          <img src={icon} />
           <nav>
             <Link
               variant="button"
