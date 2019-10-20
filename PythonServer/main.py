@@ -26,7 +26,7 @@ def get_closest_station(latitude, longitude):
             closest = station
     return closest
 
-def read_users():
+def initial_read_users():
     # TODO Read users from database into users
     return
 
