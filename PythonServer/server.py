@@ -18,10 +18,10 @@ def fillInUsers():
         cur = conn.cursor()
         sql = "SELECT * FROM users"
         cur.execute(sql)
-        row = cur.fetchone()
-        while row is not None:
-            print(row)
-            users.append(row)
+        row = cur.fetchall()
+        #while row is not None:
+        #    print(row)
+        users.append(row)
         cur.close()
 
     except(Exception, psycopg2.DatabaseError) as error:
@@ -52,7 +52,7 @@ class User_handler(Resource):
             if row is not None:
                 found = True
                 rowTuple = row
-            #fillInUsers()
+            fillInUsers()
             print(users)
             cur.close()
         except(Exception, psycopg2.DatabaseError) as error:
