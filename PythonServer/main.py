@@ -1,7 +1,9 @@
 import math
 from PythonServer.station import Station
+from PythonServer.user import User
 
 stations = []
+users = []
 
 def initialize_stations():
     f = open("CTA_-_System_Information_-_List_of__L__Stops.csv", "r")
@@ -14,9 +16,43 @@ def initialize_stations():
 def get_station_distance(station, latitude, longitude):
     return math.sqrt((latitude - station.latitude) ** 2 + (longitude - station.longitude) ** 2)
 
+def get_user_distance(user1, user2):
+    return math.sqrt((user1.latitude - user2.latitude) ** 2 + (user1.longitude - user2.longitude) ** 2)
+
 def get_closest_station(latitude, longitude):
     closest = stations[0]
     for station in stations:
         if get_station_distance(station, latitude, longitude) < get_station_distance(closest, latitude, longitude):
             closest = station
     return closest
+
+def read_users():
+    # TODO Read users from database into users
+    return
+
+def find_nearest_helper(helpee, excluded):
+    closest = None
+    for user in users:
+        if user not in excluded and user.is_helper:
+            if closest is None:
+                closest = user
+            elif get_user_distance(user, helpee) < get_user_distance(closest, helpee):
+                closest = user
+    return closest
+
+def match_helper(helpee):
+    if helpee.is_helper:
+        print("Not a helpee!")
+        return
+
+    helper = None
+    confirm = False
+    excluded = []
+    while not confirm:
+        helper = find_nearest_helper(helpee, excluded)
+        # TODO ask helper if they want to help and store the result in confirm
+        confirm = True
+        if not confirm:
+            excluded.append(helper)
+
+    return helper
