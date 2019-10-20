@@ -8,7 +8,6 @@ app = Flask(__name__)
 api = Api(app)
 
 
-
 conn = None
 
 
@@ -46,14 +45,14 @@ class User:
 
 
 stations = []
-users = [User(5, "Joe", "joe@example.com", "hunter2", True, None), User(7, "George", "george@example.com", "12345", False, False)]
+users = [User(5, "Joe", "joe@example.com", "hunter2", True, None), User(
+    7, "George", "george@example.com", "12345", False, False)]
 matches = []
 
 
 def initialize_stations(stations):
     f = open("CTA_-_System_Information_-_List_of__L__Stops.csv", "r")
     f_lines = f.readlines()
-    i = 1
     for f_line in f_lines[1:]:
         f_line_items = f_line.split(",")
         stations.append(Station(int(f_line_items[0]), f_line_items[1], f_line_items[2], f_line_items[3], f_line_items[6] == "true", f_line_items[7] == "true", f_line_items[8] == "true", f_line_items[9] == "true", f_line_items[10] == "true",
@@ -232,7 +231,8 @@ class User_handler(Resource):
 class Status_handler(Resource):
     def get(self):
         helper = request.args.getlist('helper')
-        if helper == "1":
+        print(helper)
+        if "1" in helper:
             email = "joe@example.com"
             match_found = False
             for m in matches:
@@ -240,35 +240,58 @@ class Status_handler(Resource):
                     match_found = True
                     search_user_email(users, email).match = m[0]
             if match_found:
-                pass  # TODO fuck
+                send = {
+                    "matched": 1
+                }
+                return send, 200
             else:
-                pass  # TODO fuck
+
+                send = {
+                    "matched": 0
+                }
+                return send, 200
         else:
             email = "george@example.com"
             match = match_helper(users, search_user_email(users, email))
             if match is None:
-                pass  # TODO fuck
+                send = {
+                    "matched": 0
+                }
+                return send, 200
             else:
                 matches.append((search_user_email(users, email), match))
                 search_user_email(users, email).match = match
-                # TODO fuck
+                send = {
+                    "matched": 1
+                }
+                return send, 200
 
 
 class Matched_handler(Resource):
     def get(self):
         helper = request.args.getlist('helper')
-        if helper == "1":
+        if "1" in helper:
             email = "joe@example.com"
+            match = None
             for m in matches:
-                if m[0] == search_user_email(users, email):
-                    match = m[1]
-            # TODO fuck
+                print(search_user_email(users, email).email)
+                if m[1] == search_user_email(users, email):
+                    match = m[0]
+            send = {
+                "name": match.name,
+                "station": get_closest_station(stations, 41.867405, -87.62659).station_name
+            }
+            return send, 200
         else:
             email = "george@example.com"
             for m in matches:
-                if m[1] == search_user_email(users, email):
-                    match = m[0]
-            # TODO fuck
+                if m[0] == search_user_email(users, email):
+                    match = m[1]
+            send = {
+                "name": match.name,
+                "station": get_closest_station(stations, 41.867405, -87.62659).station_name
+            }
+            return send, 200
 
 
 api.add_resource(User_handler, "/user")
