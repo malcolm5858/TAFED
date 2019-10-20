@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 import psycopg2
-from PythonServer.main_api import *
+import PythonServer.main_api
 
 app = Flask(__name__)
 api = Api(app)
@@ -21,7 +21,7 @@ def fillInUsers():
         sql = "SELECT * FROM users"
         cur.execute(sql)
         row = cur.fetchall()
-        #while row is not None:
+        # while row is not None:
         #    print(row)
         add_user(users, row)
         cur.close()
@@ -132,18 +132,18 @@ class Status_handler(Resource):
                     match_found = True
                     search_user_email(users, email).match = m[0]
             if match_found:
-                pass #TODO fuck
+                pass  # TODO fuck
             else:
-                pass #TODO fuck
+                pass  # TODO fuck
         else:
             email = "george@example.com"
             match = match_helper(users, search_user_email(users, email))
             if match is None:
-                pass #TODO fuck
+                pass  # TODO fuck
             else:
                 matches.append((search_user_email(users, email), match))
                 search_user_email(users, email).match = match
-                #TODO fuck
+                # TODO fuck
 
 
 class Matched_handler(Resource):
@@ -154,13 +154,13 @@ class Matched_handler(Resource):
             for m in matches:
                 if m[0] == search_user_email(users, email):
                     match = m[1]
-            #TODO fuck
+            # TODO fuck
         else:
             email = "george@example.com"
             for m in matches:
                 if m[1] == search_user_email(users, email):
                     match = m[0]
-            #TODO fuck
+            # TODO fuck
 
 
 api.add_resource(User_handler, "/user")
