@@ -76,32 +76,54 @@ class Register extends React.Component {
             needsaccessibility = 0;
           }
           //TODO: Send data to the server
+          // const https = require("http");
+
+          // const data = JSON.stringify({
+          //   email: email,
+          //   password: password,
+          //   name: name,
+          //   isHelper: isHelper,
+          //   needsaccessibility: needsaccessibility
+          // });
+
+          // const options = {
+          //   hostname: "127.0.0.1",
+          //   port: 5000,
+          //   path: "/user?",
+          //   method: "POST",
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //     "Content-Length": data.length
+          //   }
+          // };
+
+          // const req = https.request(options, res => {
+          //   console.log(`statusCode: ${res.statusCode}`);
+
+          //   res.on("data", d => {
+          //     console.log(d);
+          //   });
+          // });
+
+          // req.on("error", error => {
+          //   console.error(error);
+          // });
+
+          // req.write(data);
+          // req.end();
           const https = require("http");
-
-          const data = JSON.stringify({
-            email: email,
-            password: password,
-            name: name,
-            isHelper: isHelper,
-            needsaccessibility: needsaccessibility
-          });
-
           const options = {
             hostname: "127.0.0.1",
             port: 5000,
-            path: "/user",
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Content-Length": data.length
-            }
+            path: "/user?email=malcolm9292@gmail.com&password=password",
+            method: "GET"
           };
 
           const req = https.request(options, res => {
             console.log(`statusCode: ${res.statusCode}`);
 
             res.on("data", d => {
-              process.stdout.write(d);
+              console.log(d);
             });
           });
 
@@ -109,7 +131,6 @@ class Register extends React.Component {
             console.error(error);
           });
 
-          req.write(data);
           req.end();
           var good = true;
           if (good) this.setState({ redirect: true });
