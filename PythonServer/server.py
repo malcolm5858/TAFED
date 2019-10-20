@@ -1,21 +1,25 @@
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
 import psycopg2
+from PythonServer.main_api import *
 
 app = Flask(__name__)
 api = Api(app)
 
+stations = []
+users = []
+
 conn = None
-def connect(connection):
+def connect():
     """Connect to the PostGreSQL Database Server"""
     
     try:
         #Connect to server
         print("Connecting to the PostGreSQL database...")
-        connection = psycopg2.connect("dbname=tafed user= password=60616")
+        conn = psycopg2.connect("dbname=tafed user= password=60616")
 
         #create cursor
-        cur = connection.cursor()
+        cur = conn.cursor()
 
         #execute a statement
         print("PostgreSQL database version:")
@@ -31,18 +35,18 @@ def connect(connection):
         print(error)
 
 
-def disconnect(connection):
-    if connection is not None:
-        connection.close()
+def disconnect():
+    if conn is not None:
+        conn.close()
         print("Database Connection Closed.")
 
 
-class User(Resource):
-    def get(self, email, password, connection):
+class User_handler(Resource):
+    def get(self, email, password):
         try:
             found = False
-            connect(conn)
-            cur = connection.cursor()
+            connect()
+            cur = conn.cursor()
             sql = "SELECT * FROM USERS WHERE email =%s and password =%s"
             cur.execute(sql, (email, password))
             row = cur.fetchone()
@@ -52,21 +56,21 @@ class User(Resource):
         except(Exception, psycopg2.DatabaseError) as error:
             print(error)
         finally:
-            disconnect(conn)
+            disconnect()
             if found == True:
                 return row, 200
             else:
                 return "User not found", 404
 
-    def post(self, email, password, name, connection):
-        connect(conn)
-        cur = connection.cursor()
+    def post(self, email, password, name, ishelper, needsaccessibility):
+        connect()
+        cur = conn.cursor()
         sql = "SELECT email FROM users WHERE email =%s"
         cur.execute(sql, email)
         row = cur.fetchone()
         if row is not None:
             cur.close()
-            disconnect(conn)
+            disconnect()
             return "User with name {} already exists".format(name), 400
 
         #Find the id
@@ -78,19 +82,25 @@ class User(Resource):
             idVal = idVal + 1
             row = cur.fetchone()
 
-        sql = "INSERT INTO users(ID, email, password, name) VALUES (%d,%s,%s,%s)"
-        cur.execute(sql, (id, email, password, name))
+        #are they a helper or helpee, if helper, they do not need accessibility
+
+        sql = "INSERT INTO users(ID, email, password, name, ishelper, needsaccessibility) VALUES (%d,%s,%s,%s)"
+        cur.execute(sql, (id, email, password, name, ishelper, needsaccessibility))
 
         sql = "SELECT * FROM users WHERE email = %s"
         cur.execute(sql, email)
         row = cur.fetchone()
 
         cur.close()
-        disconnect(conn)
+        disconnect()
         return row, 201
 
 
 
-api.add_resource(User, "/user/<string:name>")
+api.add_resource(User_handler, "/user/<string:email><string:password><string:name><int:ishelper><int:needsaccessibility>")
+
+class location_handler(Resource):
+    def get(self, email, latitude, longitude):
+
 
 app.run(debug=True)
