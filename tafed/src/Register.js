@@ -90,7 +90,11 @@ class Register extends React.Component {
             hostname: "127.0.0.1",
             port: 5000,
             path: "/user",
-            method: "POST"
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Content-Length": data.length
+            }
           };
 
           const req = https.request(options, res => {
