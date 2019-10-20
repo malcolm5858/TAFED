@@ -65,3 +65,8 @@ def search_user_email(email):
     for user in users:
         if user.email == email:
             return user
+
+def add_user_location_data(email, latitude, longitude):
+    user = search_user_email(email)
+    user.latitude = latitude
+    user.longitude = longitude
