@@ -76,7 +76,7 @@ class Register extends React.Component {
             needsaccessibility = 0;
           }
           //TODO: Send data to the server
-          const https = require("https");
+          const https = require("http");
 
           const data = JSON.stringify({
             email: email,
@@ -87,7 +87,7 @@ class Register extends React.Component {
           });
 
           const options = {
-            hostname: "http://127.0.0.1",
+            hostname: "127.0.0.1",
             port: 5000,
             path: "/user",
             method: "POST"
@@ -166,7 +166,7 @@ class Register extends React.Component {
               )}
               <label htmlFor="email">Name</label>
               <input
-                name="Name"
+                name="name"
                 type="text"
                 placeholder="Enter your name"
                 value={values.name}

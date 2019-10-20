@@ -13,6 +13,7 @@ export default class Home extends React.Component {
     login: false,
     register: false
   };
+
   render() {
     const classes = makeStyles(theme => ({
       root: {
