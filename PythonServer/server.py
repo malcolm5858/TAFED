@@ -56,7 +56,7 @@ class User_handler(Resource):
             conn = psycopg2.connect("dbname=tafed user=tafed password=tafed")
             cur = conn.cursor()
             sql = "SELECT email FROM users WHERE email =%s"
-            cur.execute(sql, email)
+            cur.execute(sql, (email))
             row = cur.fetchone()
             if row is not None:
                 exists = 1
@@ -72,14 +72,13 @@ class User_handler(Resource):
                 row = cur.fetchone()
 
             sql = "INSERT INTO users VALUES (%s,%s,%s,%s,%s,%s)"
-            cur.execute(sql, (str(idVal), email, password, name, ishelper, needsaccessibility))
-
+            cur.execute(sql, (str(idVal), name, email, password, ishelper, needsaccessibility))
+            print(email)
+            conn.commit()
             sql = "SELECT * FROM users WHERE email = %s"
-            cur.execute(sql, email)
+            cur.execute(sql, (email))
             row = cur.fetchone()
             rowTuple = row
-            print(row)
-            print(rowTuple)
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
         finally:
@@ -88,7 +87,6 @@ class User_handler(Resource):
                 conn.close()
                 print("Database Connection Closed.")
             if exists == 0:
-                print(rowTuple)
                 return rowTuple, 201
             else:
                 return "User with name {} already exists".format(name), 400
