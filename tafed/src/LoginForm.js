@@ -1,6 +1,5 @@
 import React from "react";
 import { Formik } from "formik";
-import * as EmailValidator from "email-validator";
 import * as Yup from "yup";
 import "./styles.css";
 function LoginForm(props) {
@@ -57,7 +56,10 @@ function LoginForm(props) {
             {errors.password && touched.password && (
               <div className="input-Feedback">{errors.password}</div>
             )}
-            <button type="submit" disabled={isSubmitting}>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              onClick={onClickOfSubmit}>
               Login
             </button>
           </form>
@@ -65,6 +67,10 @@ function LoginForm(props) {
       }}
     </Formik>
   );
+  function onClickOfSubmit(e) {
+    e.preventDefault();
+    console.log("clicked");
+  }
 }
 
 export default LoginForm;
