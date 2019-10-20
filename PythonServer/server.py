@@ -37,7 +37,7 @@ def disconnect(connection):
         print("Database Connection Closed.")
 
 
-class User(Resource):
+class HTTP_handler(Resource):
     def get(self, email, password, connection):
         try:
             found = False
@@ -91,6 +91,6 @@ class User(Resource):
 
 
 
-api.add_resource(User, "/user/<string:name>")
+api.add_resource(HTTP_handler, "/user/<string:name>")
 
 app.run(debug=True)
