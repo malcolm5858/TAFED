@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import { Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default class Home extends React.Component {
   state = {
@@ -41,18 +42,13 @@ export default class Home extends React.Component {
                 TAFED
               </Box>
             </Typography>
-            <Button color="inherit" onClick={LoginButton}>
-              Login
-            </Button>
-            <Button color="inherit" onClick={RegesterButton}>
-              Register
-            </Button>
+            <Link to="/Login">
+              <Button color="inherit">Login</Button>
+            </Link>
+            <Button color="inherit">Register</Button>
           </Toolbar>
         </AppBar>
       </div>
     );
   }
 }
-
-function LoginButton(e) {}
-function RegesterButton(e) {}
