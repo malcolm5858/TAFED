@@ -1,75 +1,94 @@
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
+import psycopg2
 
 app = Flask(__name__)
 api = Api(app)
 
-users = [
-    {
-        "name": "Nicolas",
-        "age": 42,
-        "occupation": "Network Engineer"
-    },
-    {
-        "name": "Seungdeok",
-        "age": 39,
-        "occupation": "Adrian"
-    },
-    {
-        "name": "Malcolm",
-        "age": 19,
-        "occupation": "Bachelor of Science in Computer Science"
-    }
-]
+conn = None
+def connect(connection):
+    """Connect to the PostGreSQL Database Server"""
+    
+    try:
+        #Connect to server
+        print("Connecting to the PostGreSQL database...")
+        connection = psycopg2.connect("dbname=tafed user= password=60616")
+
+        #create cursor
+        cur = connection.cursor()
+
+        #execute a statement
+        print("PostgreSQL database version:")
+        cur.execute("SELECT version()")
+
+        #Display the PostgreSQL database server version
+        db_version = cur.fetchone()
+        print(db_version)
+
+        #close the communication with the PostgreSQL
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+
+
+def disconnect(connection):
+    if connection is not None:
+        connection.close()
+        print("Database Connection Closed.")
 
 
 class User(Resource):
-    def get(self, name):
-        for user in users:
-            if(name == user["name"]):
-                return user, 200
-        return "User not found", 404
+    def get(self, email, password, connection):
+        try:
+            found = False
+            connect(conn)
+            cur = connection.cursor()
+            sql = "SELECT * FROM USERS WHERE email =%s and password =%s"
+            cur.execute(sql, (email, password))
+            row = cur.fetchone()
+            if row is not None:
+                found = True
+            cur.close()
+        except(Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            disconnect(conn)
+            if found == True:
+                return row, 200
+            else:
+                return "User not found", 404
 
-    def post(self, name):
-        parser = reqparse.RequestParser()
-        parser.add_argument("age")
-        parser.add_argument("occupation")
-        args = parser.parse_args()
-        for user in users:
-            if(name == user["name"]):
-                return "User with name {} already exists".format(name), 400
+    def post(self, email, password, name, connection):
+        connect(conn)
+        cur = connection.cursor()
+        sql = "SELECT email FROM users WHERE email =%s"
+        cur.execute(sql, email)
+        row = cur.fetchone()
+        if row is not None:
+            cur.close()
+            disconnect(conn)
+            return "User with name {} already exists".format(name), 400
 
-        user = {
-            "name": name,
-            "age": args["age"],
-            "occupation": args["occupation"]
-        }
-        users.append(user)
-        return user, 201
+        #Find the id
+        idVal = 1
+        sql = "SELECT * FROM users"
+        cur.execute(sql)
+        row = cur.fetchone()
+        while row is not None:
+            idVal = idVal + 1
+            row = cur.fetchone()
 
-    def put(self, name):
-        parser = reqparse.RequestParser()
-        parser.add_argument("age")
-        parser.add_argument("occupation")
-        args = parser.parse_args()
-        for user in users:
-            if(name == user["name"]):
-                user["age"] = args["age"]
-                user["occupation"] = args["occupation"]
-                return user, 200
+        sql = "INSERT INTO users(ID, email, password, name) VALUES (%d,%s,%s,%s)"
+        cur.execute(sql, (id, email, password, name))
 
-        user = {
-            "name": name,
-            "age": args["age"],
-            "occupation": args["occupation"]
-        }
-        users.append(user)
-        return user, 201
+        sql = "SELECT * FROM users WHERE email = %s"
+        cur.execute(sql, email)
+        row = cur.fetchone()
 
-    def delete(self, name):
-        global users
-        users = [user for user in users if user["name"] != name]
-        return "{} is deleted.".format(name), 200
+        cur.close()
+        disconnect(conn)
+        return row, 201
+
 
 
 api.add_resource(User, "/user/<string:name>")
