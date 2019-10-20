@@ -8,10 +8,9 @@ export default class Matched extends React.Component {
   render() {
     return (
       <div onLoad={onload}>
-        <h1>You have been matched with a helper</h1>
-        <p>
-          there name is {name} and they will meet you at {station} station
-        </p>
+        <h1>Helper Found:</h1>
+        <h2>{name}</h2>
+          <p>Nearest CTA 'L' Station: {station}</p>
       </div>
     );
   }
