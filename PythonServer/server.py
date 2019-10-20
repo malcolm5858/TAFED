@@ -1,13 +1,14 @@
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 import psycopg2
-#from main_api import *
+from PythonServer.main_api import *
 
 app = Flask(__name__)
 api = Api(app)
 
 stations = []
 users = []
+matches = []
 
 conn = None
 
@@ -16,14 +17,13 @@ def fillInUsers():
     try:
         print("Connecting to the PostGreSQL database...")
         conn = psycopg2.connect("dbname=tafed user=tafed password=tafed")
-        users = []
         cur = conn.cursor()
         sql = "SELECT * FROM users"
         cur.execute(sql)
         row = cur.fetchall()
         #while row is not None:
         #    print(row)
-        users.append(row)
+        add_user(users, row)
         cur.close()
 
     except(Exception, psycopg2.DatabaseError) as error:
@@ -121,7 +121,68 @@ class User_handler(Resource):
                 return "User with name {} already exists".format(name), 400
 
 
-api.add_resource(User_handler, "/user")
+class Status_handler(Resource):
+    def get(self):
+        helper = request.args.getlist('helper')
+        if helper == "1":
+            email = "joe@example.com"
+            match_found = False
+            for m in matches:
+                if m[1] == search_user_email(users, email):
+                    match_found = True
+                    search_user_email(users, email).match = m[0]
+            if match_found:
+                pass #TODO fuck
+            else:
+                pass #TODO fuck
+        else:
+            email = "george@example.com"
+            match = match_helper(users, search_user_email(users, email))
+            if match is None:
+                pass #TODO fuck
+            else:
+                matches.append((search_user_email(users, email), match))
+                search_user_email(users, email).match = match
+                #TODO fuck
 
+
+class Matched_handler(Resource):
+    def get(self):
+        helper = request.args.getlist('helper')
+        if helper == "1":
+            email = "joe@example.com"
+            for m in matches:
+                if m[0] == search_user_email(users, email):
+                    match = m[1]
+            #TODO fuck
+        else:
+            email = "george@example.com"
+            for m in matches:
+                if m[1] == search_user_email(users, email):
+                    match = m[0]
+            #TODO fuck
+
+
+api.add_resource(User_handler, "/user")
+api.add_resource(Status_handler, "/status")
+api.add_resource(Matched_handler, "/matched")
+
+initialize_stations(stations)
+
+conn = None
+try:
+    conn = psycopg2.connect("dbname=tafed user=tafed password=tafed")
+    cur = conn.cursor()
+    sql = "SELECT * FROM users"
+    cur.execute(sql)
+    rows = cur.fetchall()
+    read_users(users, rows)
+    cur.close()
+except(Exception, psycopg2.DatabaseError) as error:
+    print(error)
+finally:
+    if conn is not None:
+        conn.close()
+        print("Database Connection Closed.")
 
 app.run(debug=True)

@@ -1,5 +1,5 @@
 class User:
-    def __init__(self, user_id, email, password, name, is_helper, need_accessibility, latitude, longitude):
+    def __init__(self, user_id, name, email, password, is_helper, need_accessibility, latitude, longitude):
         self.user_id = user_id
         self.email = email
         self.password = password
@@ -8,3 +8,4 @@ class User:
         self.need_accessibility = need_accessibility
         self.latitude = latitude
         self.longitude = longitude
+        self.match = None

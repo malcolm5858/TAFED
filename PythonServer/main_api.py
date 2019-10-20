@@ -23,13 +23,12 @@ def get_closest_station(stations, latitude, longitude):
             closest = station
     return closest
 
-def read_users():
-    # TODO Read users from database into users
-    return
+def read_users(users, rows):
+    for row in rows:
+        add_user(row)
 
-def add_user(row):
-    # TODO figure out how to parse this shit
-    return
+def add_user(users, row):
+    users.append(User(int(row[0]), row[1], row[2], row[3], row[5] == "1", row[6] == "1"))
 
 def find_nearest_helper(users, helpee, excluded):
     closest = None
