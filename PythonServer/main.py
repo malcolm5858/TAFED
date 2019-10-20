@@ -26,7 +26,7 @@ def get_closest_station(latitude, longitude):
             closest = station
     return closest
 
-def initial_read_users():
+def read_users():
     # TODO Read users from database into users
     return
 
@@ -65,8 +65,3 @@ def search_user_email(email):
     for user in users:
         if user.email == email:
             return user
-
-def add_user_location_data(email, latitude, longitude):
-    user = search_user_email(email)
-    user.latitude = latitude
-    user.longitude = longitude
