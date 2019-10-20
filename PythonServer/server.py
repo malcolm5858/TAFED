@@ -10,6 +10,8 @@ stations = []
 users = []
 
 conn = None
+
+
 def fillInUsers():
     try:
         print("Connecting to the PostGreSQL database...")
@@ -29,7 +31,8 @@ def fillInUsers():
     finally:
         if conn is not None:
             conn.close()
-            print("Database Connection Closed.")    
+            print("Database Connection Closed.")
+
 
 class User_handler(Resource):
     def get(self):
@@ -39,20 +42,21 @@ class User_handler(Resource):
         try:
             found = False
 
-            #Connect to server
+            # Connect to server
             print("Connecting to the PostGreSQL database...")
             conn = psycopg2.connect("dbname=tafed user=tafed password=tafed")
 
             cur = conn.cursor()
             sql = "SELECT * FROM USERS WHERE email =%s and password =%s"
+            print(email)
             cur.execute(sql, (str(email), str(password)))
             row = cur.fetchone()
             print(str(email))
-            print(row[0])
+            # print(row[0])
             if row is not None:
                 found = True
                 rowTuple = row
-            fillInUsers()
+            # fillInUsers()
             print(users)
             cur.close()
         except(Exception, psycopg2.DatabaseError) as error:
@@ -76,7 +80,7 @@ class User_handler(Resource):
         try:
             exists = 0
 
-            #Connect to server
+            # Connect to server
             print("Connecting to the PostGreSQL database...")
             conn = psycopg2.connect("dbname=tafed user=tafed password=tafed")
             cur = conn.cursor()
@@ -85,9 +89,8 @@ class User_handler(Resource):
             row = cur.fetchone()
             if row is not None:
                 exists = 1
-                
 
-            #Find the id
+            # Find the id
             idVal = 1
             sql = "SELECT * FROM users"
             cur.execute(sql)
@@ -97,7 +100,8 @@ class User_handler(Resource):
                 row = cur.fetchone()
 
             sql = "INSERT INTO users VALUES (%s,%s,%s,%s,%s,%s)"
-            cur.execute(sql, (str(idVal), str(name), str(email), str(password), str(ishelper), str(needsaccessibility)))
+            cur.execute(sql, (str(idVal), str(name), str(email), str(
+                password), str(ishelper), str(needsaccessibility)))
             print(email)
             conn.commit()
             sql = "SELECT * FROM users WHERE email = %s"
@@ -115,7 +119,6 @@ class User_handler(Resource):
                 return rowTuple, 201
             else:
                 return "User with name {} already exists".format(name), 400
-
 
 
 api.add_resource(User_handler, "/user")
