@@ -40,5 +40,5 @@ function onload(e) {
         window.location.href = "/Matched";
       }
     };
-  }, 5000);
+  }, 2000);
 }

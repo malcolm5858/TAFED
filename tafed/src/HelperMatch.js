@@ -7,13 +7,9 @@ export default class HelperMatch extends React.Component {
     return (
       <div>
         <Link href="/HelperWaiting">
-          <Button variant="contained">REQUEST HELP</Button>
+          <Button variant="contained">Volunteer</Button>
         </Link>
-        <p>
-          Here you can request help from one of our helpful volunteers, who are
-          here to show you how to board the train and arrive at you desired
-          locaton.
-        </p>
+        <p>Click the button above to actively volunteer.</p>
       </div>
     );
   }
