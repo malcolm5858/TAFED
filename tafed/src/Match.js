@@ -6,7 +6,7 @@ export default class Match extends React.Component {
   render() {
     return (
       <div>
-        <Link to="/Waiting">
+        <Link href="/Waiting">
           <Button variant="contained" onClick={onClick}>
             REQUEST HELP
           </Button>
