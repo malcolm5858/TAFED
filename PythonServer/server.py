@@ -52,7 +52,7 @@ class User_handler(Resource):
             if row is not None:
                 found = True
                 rowTuple = row
-            fillInUsers()
+            #fillInUsers()
             print(users)
             cur.close()
         except(Exception, psycopg2.DatabaseError) as error:
