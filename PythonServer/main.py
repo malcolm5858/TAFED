@@ -30,6 +30,10 @@ def read_users():
     # TODO Read users from database into users
     return
 
+def add_user(row):
+    # TODO figure out how to parse this shit
+    return
+
 def find_nearest_helper(helpee, excluded):
     closest = None
     for user in users:
@@ -56,3 +60,8 @@ def match_helper(helpee):
             excluded.append(helper)
 
     return helper
+
+def search_user_email(email):
+    for user in users:
+        if user.email == email:
+            return user
