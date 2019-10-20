@@ -6,6 +6,9 @@ import Home from "./Home";
 import Register from "./Register";
 import Match from "./Match";
 import Waiting from "./Waiting";
+import HelperMatch from "./HelperMatch";
+import Welcome from "./Welcome";
+import HelperWaiting from "./HelperWaiting";
 
 function App() {
   return (
@@ -15,6 +18,15 @@ function App() {
           <Switch>
             <Route exact path="/">
               <Home />
+              <Welcome />
+            </Route>
+            <Route exact path="/1">
+              <Home />
+              <Match />
+            </Route>
+            <Route exact path="/2">
+              <Home />
+              <HelperMatch />
             </Route>
             <Route path="/login">
               <h1>Login</h1>
@@ -29,6 +41,9 @@ function App() {
             </Route>
             <Route path="/Waiting">
               <Waiting />
+            </Route>
+            <Route exact path="/HelperWaiting">
+              <HelperWaiting />
             </Route>
           </Switch>
         </div>

@@ -284,7 +284,6 @@ export default function Home() {
         </Toolbar>
       </AppBar>
       {/* Hero unit */}
-      <Match />
     </React.Fragment>
   );
 }
