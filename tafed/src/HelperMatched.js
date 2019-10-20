@@ -1,7 +1,7 @@
 import React from "react";
 
-var name = "";
-var station = "";
+var name = "George";
+var station = "Roosevelt";
 export default class HelperMatched extends React.Component {
   render() {
     return (

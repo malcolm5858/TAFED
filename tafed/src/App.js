@@ -9,7 +9,9 @@ import Waiting from "./Waiting";
 import HelperMatch from "./HelperMatch";
 import Welcome from "./Welcome";
 import HelperWaiting from "./HelperWaiting";
-
+import Matched from "./Matched";
+import HelperMatched from "./HelperMatched";
+import Wait from "./Wait";
 function App() {
   return (
     <div className="App">
@@ -44,6 +46,15 @@ function App() {
             </Route>
             <Route exact path="/HelperWaiting">
               <HelperWaiting />
+            </Route>
+            <Route exact path="/Matched">
+              <Matched />
+            </Route>
+            <Route exact path="/HelperMatched">
+              <HelperMatched />
+            </Route>
+            <Route exact path="/Wait">
+              <Wait />
             </Route>
           </Switch>
         </div>
