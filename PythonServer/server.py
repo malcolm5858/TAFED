@@ -41,7 +41,8 @@ class User:
         self.need_accessibility = need_accessibility
         self.latitude = None
         self.longitude = None
-        self.match = None
+        self.matching = False
+        self.matched = False
 
 
 stations = []
@@ -88,7 +89,7 @@ def add_user(users, row):
 def find_nearest_helper(users, helpee, excluded):
     closest = None
     for user in users:
-        if user not in excluded and user.is_helper:
+        if user not in excluded and user.is_helper and user.matching:
             if closest is None:
                 closest = user
             elif get_user_distance(user, helpee) < get_user_distance(closest, helpee):
@@ -234,12 +235,14 @@ class Status_handler(Resource):
         print(helper)
         if "1" in helper:
             email = "joe@example.com"
+            search_user_email(users, email).matching = True
             match_found = False
             for m in matches:
                 if m[1] == search_user_email(users, email):
                     match_found = True
-                    search_user_email(users, email).match = m[0]
             if match_found:
+                search_user_email(users, email).matched = True
+                search_user_email(users, email).matching = False
                 send = {
                     "matched": 1
                 }
@@ -252,6 +255,7 @@ class Status_handler(Resource):
                 return send, 200
         else:
             email = "george@example.com"
+            search_user_email(users, email).matching = True
             match = match_helper(users, search_user_email(users, email))
             if match is None:
                 send = {
@@ -260,7 +264,8 @@ class Status_handler(Resource):
                 return send, 200
             else:
                 matches.append((search_user_email(users, email), match))
-                search_user_email(users, email).match = match
+                search_user_email(users, email).matched = True
+                search_user_email(users, email).matching = False
                 send = {
                     "matched": 1
                 }
