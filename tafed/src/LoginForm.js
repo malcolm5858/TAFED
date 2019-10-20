@@ -28,7 +28,7 @@ class LoginForm extends React.Component {
           var password = values.password;
           //TODO: Send data to the server
 
-          if (email == "George@example.com") {
+          if (email == "george@example.com") {
             this.setState({ Helpee: true });
           } else if (password != "1234qwer") {
             this.setState({ Helper: true });
