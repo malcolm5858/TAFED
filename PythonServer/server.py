@@ -7,9 +7,7 @@ import psycopg2
 app = Flask(__name__)
 api = Api(app)
 
-stations = []
-users = []
-matches = []
+
 
 conn = None
 
@@ -45,6 +43,11 @@ class User:
         self.latitude = None
         self.longitude = None
         self.match = None
+
+
+stations = []
+users = [User(5, "Joe", "joe@example.com", "hunter2", True, None), User(7, "George", "george@example.com", "12345", False, False)]
+matches = []
 
 
 def initialize_stations(stations):
