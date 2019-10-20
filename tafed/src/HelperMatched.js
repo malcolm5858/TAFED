@@ -6,10 +6,9 @@ export default class HelperMatched extends React.Component {
   render() {
     return (
       <div>
-        <h1>You have been matched with someone who needs your help</h1>
-        <p>
-          there name is {name} and they will meet you at {station} station
-        </p>
+        <h1>Success!</h1>
+          <h2>{name}</h2>
+          <p>Nearest CTA 'L' Station: {station}</p>
       </div>
     );
   }
