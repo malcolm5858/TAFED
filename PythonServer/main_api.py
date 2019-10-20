@@ -2,10 +2,7 @@ import math
 from PythonServer.station import Station
 from PythonServer.user import User
 
-stations = []
-users = []
-
-def initialize_stations():
+def initialize_stations(stations):
     f = open("CTA_-_System_Information_-_List_of__L__Stops.csv", "r")
     f_lines = f.readlines()
 
@@ -19,7 +16,7 @@ def get_station_distance(station, latitude, longitude):
 def get_user_distance(user1, user2):
     return math.sqrt((user1.latitude - user2.latitude) ** 2 + (user1.longitude - user2.longitude) ** 2)
 
-def get_closest_station(latitude, longitude):
+def get_closest_station(stations, latitude, longitude):
     closest = stations[0]
     for station in stations:
         if get_station_distance(station, latitude, longitude) < get_station_distance(closest, latitude, longitude):
@@ -34,7 +31,7 @@ def add_user(row):
     # TODO figure out how to parse this shit
     return
 
-def find_nearest_helper(helpee, excluded):
+def find_nearest_helper(users, helpee, excluded):
     closest = None
     for user in users:
         if user not in excluded and user.is_helper:
@@ -44,7 +41,7 @@ def find_nearest_helper(helpee, excluded):
                 closest = user
     return closest
 
-def match_helper(helpee):
+def match_helper(users, helpee):
     if helpee.is_helper:
         print("Not a helpee!")
         return
@@ -53,7 +50,7 @@ def match_helper(helpee):
     confirm = False
     excluded = []
     while not confirm:
-        helper = find_nearest_helper(helpee, excluded)
+        helper = find_nearest_helper(users, helpee, excluded)
         # TODO ask helper if they want to help and store the result in confirm
         confirm = True
         if not confirm:
@@ -61,7 +58,7 @@ def match_helper(helpee):
 
     return helper
 
-def search_user_email(email):
+def search_user_email(users, email):
     for user in users:
         if user.email == email:
             return user

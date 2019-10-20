@@ -1,10 +1,13 @@
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
 import psycopg2
-from PythonServer.main import *
+from PythonServer.main_api import *
 
 app = Flask(__name__)
 api = Api(app)
+
+stations = []
+users = []
 
 conn = None
 def connect():
