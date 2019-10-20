@@ -4,6 +4,8 @@ import LoginForm from "./LoginForm";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./Home";
 import Register from "./Register";
+import Match from "./Match";
+import Waiting from "./Waiting";
 
 function App() {
   return (
@@ -21,6 +23,12 @@ function App() {
             <Route path="/Register">
               <h1>Register</h1>
               <Register />
+            </Route>
+            <Route path="/Match">
+              <Match />
+            </Route>
+            <Route path="/Waiting">
+              <Waiting />
             </Route>
           </Switch>
         </div>
