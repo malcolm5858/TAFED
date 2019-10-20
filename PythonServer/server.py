@@ -56,7 +56,11 @@ class User_handler(Resource):
             if row is not None:
                 found = True
                 rowTuple = row
+<<<<<<< HEAD
             # fillInUsers()
+=======
+            #fillInUsers()
+>>>>>>> 70a1f1909160d9136b2f3a9087a53a47f83d6036
             print(users)
             cur.close()
         except(Exception, psycopg2.DatabaseError) as error:
