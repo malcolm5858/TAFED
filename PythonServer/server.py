@@ -10,6 +10,26 @@ stations = []
 users = []
 
 conn = None
+def fillInUsers():
+    try:
+        print("Connecting to the PostGreSQL database...")
+        conn = psycopg2.connect("dbname=tafed user=tafed password=tafed")
+        users = []
+        cur = conn.cursor()
+        sql = "SELECT * FROM users"
+        cur.execute(sql)
+        row = cur.fetchone()
+        while row is not None:
+            print(row)
+            users.append(row)
+        cur.close()
+
+    except(Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+            print("Database Connection Closed.")    
 
 class User_handler(Resource):
     def get(self):
@@ -25,10 +45,15 @@ class User_handler(Resource):
 
             cur = conn.cursor()
             sql = "SELECT * FROM USERS WHERE email =%s and password =%s"
-            cur.execute(sql, (email, password))
+            cur.execute(sql, (str(email), str(password)))
             row = cur.fetchone()
+            print(str(email))
+            print(row[0])
             if row is not None:
                 found = True
+                rowTuple = row
+            fillInUsers()
+            print(users)
             cur.close()
         except(Exception, psycopg2.DatabaseError) as error:
             print(error)
@@ -72,17 +97,17 @@ class User_handler(Resource):
                 row = cur.fetchone()
 
             sql = "INSERT INTO users VALUES (%s,%s,%s,%s,%s,%s)"
-            cur.execute(sql, (str(idVal), name, email, password, ishelper, needsaccessibility))
+            cur.execute(sql, (str(idVal), str(name), str(email), str(password), str(ishelper), str(needsaccessibility)))
             print(email)
             conn.commit()
             sql = "SELECT * FROM users WHERE email = %s"
             cur.execute(sql, (email))
             row = cur.fetchone()
             rowTuple = row
+            cur.close()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
         finally:
-            cur.close()
             if conn is not None:
                 conn.close()
                 print("Database Connection Closed.")
@@ -94,9 +119,6 @@ class User_handler(Resource):
 
 
 api.add_resource(User_handler, "/user")
-
-#class location_handler(Resource):
-#    def get(self, email, latitude, longitude):
 
 
 app.run(debug=True)
