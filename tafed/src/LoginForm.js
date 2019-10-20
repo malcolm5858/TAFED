@@ -14,6 +14,7 @@ class LoginForm extends React.Component {
     if (redirect) {
       return <Redirect to="/" />;
     }
+
     return (
       <Formik
         initialValues={{ email: "", password: "" }}
@@ -22,7 +23,12 @@ class LoginForm extends React.Component {
           var email = values.email;
           var password = values.password;
           //TODO: Send data to the server
-          this.setState({ redirect: true });
+          var good = true;
+          if (good) this.setState({ redirect: true });
+          else {
+            window.alert("Username or Password incorrect");
+            window.location.reload();
+          }
         }}
         validationSchema={Yup.object().shape({
           email: Yup.string()
