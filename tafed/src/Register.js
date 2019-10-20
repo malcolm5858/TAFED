@@ -115,7 +115,7 @@ class Register extends React.Component {
           const options = {
             hostname: "127.0.0.1",
             port: 5000,
-            path: "/user?email=malcolm9292@gmail.com&password=password",
+            path: "/user?email=man&password=man",
             method: "GET"
           };
 
