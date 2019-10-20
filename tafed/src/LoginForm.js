@@ -6,13 +6,17 @@ import { Redirect } from "react-router-dom";
 
 class LoginForm extends React.Component {
   state = {
-    redirect: false
+    Helper: false,
+    Helpee: false
   };
   render() {
-    const { redirect } = this.state;
-
-    if (redirect) {
-      return <Redirect to="/" />;
+    const { Helper } = this.state;
+    const { Helpee } = this.state;
+    if (Helper) {
+      return <Redirect to="/2" />;
+    }
+    if (Helpee) {
+      return <Redirect to="/1" />;
     }
 
     return (
@@ -23,9 +27,12 @@ class LoginForm extends React.Component {
           var email = values.email;
           var password = values.password;
           //TODO: Send data to the server
-          var good = true;
-          if (good) this.setState({ redirect: true });
-          else {
+
+          if (email == "George@example.com") {
+            this.setState({ Helpee: true });
+          } else if (password != "1234qwer") {
+            this.setState({ Helper: true });
+          } else {
             window.alert("Username or Password incorrect");
             window.location.reload();
           }
